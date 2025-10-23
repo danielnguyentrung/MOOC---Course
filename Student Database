@@ -1,0 +1,75 @@
+# Write your solution here
+
+# Part 1
+
+def add_student(database: dict, student_name: str):  
+    database[student_name] = [] 
+
+def print_student(database: dict, student_name: str): 
+    if student_name in database:
+        courses_taken = len(database[student_name]) 
+        print(f"{student_name}:")
+        print(f" {courses_taken} completed courses:")
+        for course_name, grade in database[student_name]:
+            print(" " , course_name, grade)
+        grades = [grade for _, grade in database[student_name]]
+        average = sum(grades)/courses_taken
+        print(f" average grade {average:.1f}")
+            
+    else: 
+        print(f"{student_name}: no such person in the database")
+
+# Part 2 and 3
+
+def add_course(database: dict, student_name: str, course: tuple): 
+    course_name = course[0] 
+    grade = course[1]
+    if grade == 0: 
+        return
+    for i in range(len(database[student_name])):
+        existing_course, existing_grade = database[student_name][i]
+        if existing_course == course_name:
+            if grade > existing_grade: 
+                database[student_name][i] = (course_name, grade)
+            return 
+
+    if student_name in database:
+        database[student_name].append(course)
+    else:
+        database[student_name] = []
+
+# Part 4
+
+def summary (database: dict):
+    all_students = len(database)
+    print(f"students {all_students}")
+
+    max_courses = 0 
+    student_with_most = ""
+    for student_name, courses in database.items():
+        if len(courses) > max_courses: 
+            max_courses = len(courses)
+            student_with_most = student_name
+    print(f"most courses completed {max_courses} {student_with_most}")
+
+    best_avg = 0 
+    best_student = ""
+
+    for student_name, courses in database.items(): 
+        total = sum(grade for _, grade in courses)
+        avg = total / len(courses)
+        if avg > best_avg:
+            best_avg = avg 
+            best_student = student_name
+    print(f"best average grade {best_avg:.1f} {best_student}")
+
+if __name__ == "__main__":
+    students = {}
+    add_student(students, "Peter")
+    add_student(students, "Eliza")
+    add_course(students, "Peter", ("Data Structures and Algorithms", 1))
+    add_course(students, "Peter", ("Introduction to Programming", 1))
+    add_course(students, "Peter", ("Advanced Course in Programming", 1))
+    add_course(students, "Eliza", ("Introduction to Programming", 5))
+    add_course(students, "Eliza", ("Introduction to Computer Science", 4))
+    summary(students)
