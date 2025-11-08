@@ -1,0 +1,24 @@
+# Write your solution here
+
+def find_words(search_term:str): 
+    items = [] 
+
+    with open("words.txt") as new_file: 
+
+        for line in new_file: 
+            word = line.strip() 
+
+            if search_term == word:
+                items.append(word)
+                
+            elif search_term.endswith("*"):
+                beginning = search_term[:-1]
+                if word.startswith(beginning): 
+                    items.append(word)
+
+            elif search_term.startswith("*"):
+                ending = search_term[1:]
+                if word.endswith(ending):
+                    items.append(word)
+    
+            elif "." in search_term:
